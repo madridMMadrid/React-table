@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
-function Example() {
+function Example({test}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
     setShow(false)
-    console.log('Закрыть', show)
+    console.log('Закрыть', show, test)
   };
   const handleShow = () => {
     setShow(true);
@@ -21,7 +21,7 @@ function Example() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Title</Modal.Title>
+        <Modal.Title>{test}</Modal.Title>
         </Modal.Header>
         <Modal.Body>Инфа про чела</Modal.Body>
         <Modal.Footer>
@@ -38,6 +38,7 @@ function Example() {
 }
 
 export default props => (
+  <>
     <table className="table" style={{ cursor: "pointer" }}>
       <thead>
         <tr>
@@ -66,8 +67,8 @@ export default props => (
         {props.data.map(item => (
           <tr
             key={item.id + item.phone}
-          >
-            <td 
+            >
+            <td
             onClick={props.onRowSelect.bind(null, item)}
             >{item.id}</td>
             <td>{item.firstName}</td>
@@ -75,10 +76,11 @@ export default props => (
             <td>{item.email}</td>
             <td>{item.phone}</td>
             <td><button type="button" className="btn btn-danger" onClick={props.deleteRow.bind(null, item.id)}>x</button></td>
-            <td><Example /></td>
+            <td><button type="button" className="btn btn-primary" onClick={props.editRow.bind(null, item.id)}>Редактировать</button></td>
           </tr>
 
         ))}
       </tbody>
     </table>
+  </>
 );

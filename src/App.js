@@ -3,15 +3,14 @@ import Table from './Table/Table';
 import DetailRowView from './DetailRowView/DetailRowView';
 import TableSearch from './TableSearch/TableSearch';
 import TableAdd from './TableAdd/TableAdd';
+import TableEdit from './TableEdit/TableEdit';
 import _ from 'lodash';
 
 
 class App extends Component {
 
-  
+
   state = {
-    isModeSelected: false,
-    isLoading: false,
     data: [
       {
         "id": 531,
@@ -61,6 +60,7 @@ class App extends Component {
     sortField: 'id',
     row: null,
     currentPage: 0,
+    edit: true
   }
   onSort = sortField => {
     const cloneData = this.state.data.concat();
@@ -68,15 +68,35 @@ class App extends Component {
     const data = _.orderBy(cloneData, sortField, sort);
     this.setState({ data, sort, sortField })
   }
+  changeRow(id) {
+    const cloneData = this.state.data.concat();
+    // const data = cloneData.map(item => {
+    //   if (item.id === id) {
+    //     console.log('id in', item.id)
+    //   }
+    //   console.log('inner id', id)
+    //   return item
+    // })
 
-  modeSelectHandler = url => {
-    // console.log(url)
-    this.setState({
-      isModeSelected: true,
-      isLoading: true,
+
+    console.log('id changeRow', id)
+    const a = this.state.data.map(item => {
+      if (item.id === id) item.firstName = 'test'
+      return item
     })
-    this.fetchData(url)
+    console.log('a', a)
+    this.setState({
+      data: [{
+        "id": 11,
+        "firstName": 'row.name',
+        "lastName": 'row.lastName',
+        "email": "andrey@bk.ru",
+        "description": "Описание"
+      }]
+    })
+    console.log('change')
   }
+
 
 
   onRowSelect = row => (
@@ -90,29 +110,26 @@ class App extends Component {
       "firstName": row.name,
       "lastName": row.lastName,
       "email": "andrey@bk.ru",
-      "phone": "(909)541-2985",
-      "address": {
-        "streetAddress": "7366 Ante Ln",
-        "city": "Saint Pauls",
-        "state": "NC",
-        "zip": "93276"
-      },
       "description": "Описание"
     });
 
     this.setState(oldTable);
   }
   deleteRow = row => (
-    this.setState({data: this.state.data.filter(item => item.id !== row)})
+    this.setState({ data: this.state.data.filter(item => item.id !== row) })
   )
+  editRow = row => {
+    console.log('id', row)
+    this.setState({ edit: false })
+    this.changeRow(row)
+  }
 
-  pageChangeHandler = ({ selected }) => (
-    this.setState({ currentPage: selected })
-  )
 
   searchHandler = search => {
-    this.setState({ search, currentPage: 0 })
+    this.setState({ search })
   }
+
+
 
   getFilteredData() {
     const { data, search } = this.state
@@ -140,21 +157,22 @@ class App extends Component {
     return (
       <div className="container">
         {
-            <React.Fragment>
-              <TableSearch onSearch={this.searchHandler} />
-              <TableAdd addTable={this.addTable} />
-              <Table
-                data={displayData}
-                onSort={this.onSort}
-                sort={this.state.sort}
-                sortField={this.state.sortField}
-                onRowSelect={this.onRowSelect}
-                deleteRow={this.deleteRow}
-              />
-            </React.Fragment>
+          <React.Fragment>
+            <TableSearch onSearch={this.searchHandler} />
+            {this.state.edit ? <TableAdd addTable={this.addTable} /> : null}
+            {!this.state.edit ? <TableEdit /> : null}
+            <Table
+              data={displayData}
+              onSort={this.onSort}
+              sort={this.state.sort}
+              sortField={this.state.sortField}
+              onRowSelect={this.onRowSelect}
+              deleteRow={this.deleteRow}
+              editRow={this.editRow}
+            />
+          </React.Fragment>
 
         }
-
         {
           this.state.row ? <DetailRowView person={this.state.row} /> : null
         }
