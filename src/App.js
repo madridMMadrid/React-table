@@ -60,7 +60,8 @@ class App extends Component {
     sortField: 'id',
     row: null,
     currentPage: 0,
-    edit: true
+    edit: true,
+    changeId: 0
   }
   onSort = sortField => {
     const cloneData = this.state.data.concat();
@@ -68,34 +69,27 @@ class App extends Component {
     const data = _.orderBy(cloneData, sortField, sort);
     this.setState({ data, sort, sortField })
   }
-  changeRow(id) {
-    const cloneData = this.state.data.concat();
-    // const data = cloneData.map(item => {
-    //   if (item.id === id) {
-    //     console.log('id in', item.id)
-    //   }
-    //   console.log('inner id', id)
-    //   return item
-    // })
 
-
-    console.log('id changeRow', id)
+  finalEditTable = (id) => {
+    console.log('id change', id)
+    const { changeId } = this.state
     const a = this.state.data.map(item => {
-      if (item.id === id) item.firstName = 'test'
+      if (item.id === changeId) {
+        return [
+          item.firstName = id.name,
+          item.lastName = id.lastName
+        ]
+      }
       return item
     })
-    console.log('a', a)
-    this.setState({
-      data: [{
-        "id": 11,
-        "firstName": 'row.name',
-        "lastName": 'row.lastName',
-        "email": "andrey@bk.ru",
-        "description": "Описание"
-      }]
-    })
-    console.log('change')
+    this.setState(a)
+    this.setState({ edit: true })
   }
+  editRow = rowId => {
+    this.setState({ edit: false })
+    this.setState({ changeId: rowId })
+  }
+
 
 
 
@@ -118,11 +112,6 @@ class App extends Component {
   deleteRow = row => (
     this.setState({ data: this.state.data.filter(item => item.id !== row) })
   )
-  editRow = row => {
-    console.log('id', row)
-    this.setState({ edit: false })
-    this.changeRow(row)
-  }
 
 
   searchHandler = search => {
@@ -160,7 +149,7 @@ class App extends Component {
           <React.Fragment>
             <TableSearch onSearch={this.searchHandler} />
             {this.state.edit ? <TableAdd addTable={this.addTable} /> : null}
-            {!this.state.edit ? <TableEdit /> : null}
+            {!this.state.edit ? <TableEdit finalEditTable={this.finalEditTable}/> : null}
             <Table
               data={displayData}
               onSort={this.onSort}

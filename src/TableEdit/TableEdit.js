@@ -23,7 +23,7 @@ export default props => {
         <button 
           type="submit" 
           className="btn btn-success mb-2 mr-2"
-          // onClick={props.addTable.bind(null, {name, lastName})}  
+          onClick={props.finalEditTable.bind(null, {name, lastName})}  
         >Change row</button>
         <label className="sr-only" for="inlineFormInputName2">Name</label>
         <input 
