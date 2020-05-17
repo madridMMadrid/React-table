@@ -3,14 +3,10 @@ import React, { useState } from 'react'
 export default props => {
   const [name, setValueName] = useState('')
   const [lastName, setValueLastName] = useState('')
-  const valueChangeHandlerName = event => {
-    setValueName(event.target.value)
-  }
-  const valueChangeHandlerLastName = event => {
-    setValueLastName(event.target.value)
-  }
+  const valueChangeHandlerName = event => setValueName(event.target.value)
+  const valueChangeHandlerLastName = event => setValueLastName(event.target.value)
+
   const handleSubmit = event => {
-    console.log('event', name, lastName)
     setValueName('')
     setValueLastName('')
     event.preventDefault();
@@ -30,7 +26,7 @@ export default props => {
           type="text" 
           className="form-control mb-2 mr-sm-2" 
           id="inlineFormInputName2" 
-          placeholder="Jane Doe" 
+          placeholder={name} 
           onChange={valueChangeHandlerName}
           value={name}
         />
@@ -43,6 +39,11 @@ export default props => {
           onChange={valueChangeHandlerLastName}
           value={lastName}
         />
+        <button 
+          type="submit" 
+          className="btn btn-success mb-2 mr-2"
+          onClick={props.cancel.bind(null)}  
+        >Change row</button>
       </form>
     </>
   )

@@ -71,9 +71,9 @@ class App extends Component {
   }
 
   finalEditTable = (id) => {
-    console.log('id change', id)
+    console.log('что пришло', id)
     const { changeId } = this.state
-    const a = this.state.data.map(item => {
+    const changePerson = this.state.data.map(item => {
       if (item.id === changeId) {
         return [
           item.firstName = id.name,
@@ -82,12 +82,16 @@ class App extends Component {
       }
       return item
     })
-    this.setState(a)
+    this.setState(changePerson)
     this.setState({ edit: true })
   }
   editRow = rowId => {
+    console.log('rowId', rowId)
     this.setState({ edit: false })
     this.setState({ changeId: rowId })
+  }
+  cancel = () => {
+    this.setState({ edit: true })
   }
 
 
@@ -109,16 +113,14 @@ class App extends Component {
 
     this.setState(oldTable);
   }
+
   deleteRow = row => (
     this.setState({ data: this.state.data.filter(item => item.id !== row) })
   )
 
-
   searchHandler = search => {
     this.setState({ search })
   }
-
-
 
   getFilteredData() {
     const { data, search } = this.state
@@ -149,7 +151,7 @@ class App extends Component {
           <React.Fragment>
             <TableSearch onSearch={this.searchHandler} />
             {this.state.edit ? <TableAdd addTable={this.addTable} /> : null}
-            {!this.state.edit ? <TableEdit finalEditTable={this.finalEditTable}/> : null}
+            {!this.state.edit ? <TableEdit finalEditTable={this.finalEditTable} cancel={this.cancel}/> : null}
             <Table
               data={displayData}
               onSort={this.onSort}
@@ -160,7 +162,6 @@ class App extends Component {
               editRow={this.editRow}
             />
           </React.Fragment>
-
         }
         {
           this.state.row ? <DetailRowView person={this.state.row} /> : null
