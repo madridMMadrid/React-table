@@ -30,7 +30,7 @@ export default props => (
       <tbody>
         {props.data.map(item => (
           <tr
-            key={item.id + item.phone}
+            key={item.id + item.data} 
             >
             <td
             onClick={props.onRowSelect.bind(null, item)}
@@ -40,7 +40,7 @@ export default props => (
             <td>{item.data}</td>
             <td>{item.group}</td>
             <td><button type="button" className="btn btn-danger" onClick={props.deleteRow.bind(null, item.id)}>x</button></td>
-            <td><button type="button" className="btn btn-primary" onClick={props.editRow.bind(null, item.id)}>Редактировать</button></td>
+            <td><button type="button" className="btn btn-primary" onClick={props.editRow.bind(null, item)}>Ред.</button></td>
           </tr>
 
         ))}

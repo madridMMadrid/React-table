@@ -12,6 +12,8 @@ export default props => {
   const handleSubmit = event => {
     setValueName('')
     setValueLastName('')
+    setData('')
+    setGrpup('')
     event.preventDefault();
   }
 
@@ -20,6 +22,7 @@ export default props => {
     <>
       <form className="form-inline" onSubmit={handleSubmit}>
         <button 
+          disabled={name.length < 3}
           type="submit" 
           className="btn btn-primary mb-2 mr-2"
           onClick={props.addTable.bind(null, {name, lastName, data, group})}  
