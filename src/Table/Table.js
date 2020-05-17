@@ -1,41 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
 
-function Example({test}) {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => {
-    setShow(false)
-    console.log('Закрыть', show, test)
-  };
-  const handleShow = () => {
-    setShow(true);
-    console.log('Открыть', show)
-  }
-
-  return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        Редактировать
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-        <Modal.Title>{test}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Инфа про чела</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Закрыть
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Созранить
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
-}
 
 export default props => (
   <>
@@ -53,12 +17,12 @@ export default props => (
             Last Name{" "}
             {props.sortField === "lastName" ? <small>{props.sort}</small> : null}
           </th>
-          <th onClick={props.onSort.bind(null, "email")}>
-            E-mail{" "}
+          <th onClick={props.onSort.bind(null, "data")}>
+            data{" "}
             {props.sortField === "email" ? <small>{props.sort}</small> : null}
           </th>
-          <th onClick={props.onSort.bind(null, "phone")}>
-            Phone{" "}
+          <th onClick={props.onSort.bind(null, "group")}>
+            gropu{" "}
             {props.sortField === "phone" ? <small>{props.sort}</small> : null}
           </th>
         </tr>
@@ -73,8 +37,8 @@ export default props => (
             >{item.id}</td>
             <td>{item.firstName}</td>
             <td>{item.lastName}</td>
-            <td>{item.email}</td>
-            <td>{item.phone}</td>
+            <td>{item.data}</td>
+            <td>{item.group}</td>
             <td><button type="button" className="btn btn-danger" onClick={props.deleteRow.bind(null, item.id)}>x</button></td>
             <td><button type="button" className="btn btn-primary" onClick={props.editRow.bind(null, item.id)}>Редактировать</button></td>
           </tr>

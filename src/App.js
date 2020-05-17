@@ -16,43 +16,22 @@ class App extends Component {
         "id": 531,
         "firstName": "Андрей",
         "lastName": "Баранов",
-        "email": "andrey@bk.ru",
-        "phone": "(909)541-2985",
-        "address": {
-          "streetAddress": "7366 Ante Ln",
-          "city": "Saint Pauls",
-          "state": "NC",
-          "zip": "93276"
-        },
-        "description": "Описание"
+        "data": "11.12.87",
+        "group": "J-1"
       },
       {
         "id": 7,
         "firstName": "Гретта",
         "lastName": "Гарлкина",
-        "email": "diana@list.ru",
-        "phone": "(373)069-8474",
-        "address": {
-          "streetAddress": "3533 Pulvinar Dr",
-          "city": "Allentown",
-          "state": "KY",
-          "zip": "19194"
-        },
-        "description": "Описание 1"
+        "data": "12.12.87",
+        "group": "K-1"
       },
       {
         "id": 876,
         "firstName": "Джеймс",
         "lastName": "Гандольфини",
-        "email": "jemes@list.ru",
-        "phone": "(455)380-5765",
-        "address": {
-          "streetAddress": "6557 Pretium Ct",
-          "city": "Berlin",
-          "state": "LA",
-          "zip": "94511"
-        },
-        "description": "Описание 2"
+        "data": "09.12.87",
+        "group": "F-1"
       },
     ],
     search: '',
@@ -104,11 +83,11 @@ class App extends Component {
     let oldTable = this.state.data;
     console.log('row', row)
     oldTable.push({
-      "id": 11,
+      "id": Math.floor(Math.random() * 100),
       "firstName": row.name,
       "lastName": row.lastName,
-      "email": "andrey@bk.ru",
-      "description": "Описание"
+      "data": row.data,
+      "group": row.group
     });
 
     this.setState(oldTable);
@@ -132,7 +111,7 @@ class App extends Component {
       return (
         item["firstName"].toLowerCase().includes(search.toLowerCase()) ||
         item["lastName"].toLowerCase().includes(search.toLowerCase()) ||
-        item["email"].toLowerCase().includes(search.toLowerCase())
+        item["group"].toLowerCase().includes(search.toLowerCase())
       );
     });
     if (!result.length) {
