@@ -28,7 +28,8 @@ export default props => (
         </tr>
       </thead>
       <tbody>
-        {props.data.map(item => (
+        {props.data ?
+        props.data.map(item => (
           <tr
             key={item.id + item.data} 
             >
@@ -43,7 +44,7 @@ export default props => (
             <td><button type="button" className="btn btn-primary" onClick={props.editRow.bind(null, item)}>Ред.</button></td>
           </tr>
 
-        ))}
+        )) : null}
       </tbody>
     </table>
   </>
