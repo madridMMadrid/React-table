@@ -1,82 +1,98 @@
-import React, { Component, useState } from 'react';
-import Order from './OrderComp'
-import AddGroup from './AddGroup/AddGroup'
+import React, { Component } from 'react';
+import Loader from './Loader/Loader';
+import Table from './Table/Table';
+import ModeSelector from './ModeSelector/ModeSelector';
 
 
 class App extends Component {
   state = {
-    group: [
-      {
-        id: 1, nameGroup: 'Group_1', test: [{
-          "id": 531,
-          "firstName": "Андрей",
-          "lastName": "Баранов",
-          "data": "11.12.87",
-          "group": "J-1"
-        },
-        {
-          "id": 7,
-          "firstName": "Гретта",
-          "lastName": "Гарлкина",
-          "data": "12.12.87",
-          "group": "K-1"
-        },
-        {
-          "id": 876,
-          "firstName": "Джеймс",
-          "lastName": "Гандольфини",
-          "data": "09.12.87",
-          "group": "F-1"
-        }]
-      },
-      {
-        id: 2, nameGroup: 'Group_2', test: [{
-          "id": 531,
-          "firstName": "Андрей",
-          "lastName": "Баранов",
-          "data": "11.12.87",
-          "group": "J-1"
-        }]
+    isModeSelected: false,
+    isLoading: false,
+    data: [],
+    currentPage: 0,
+    token: 'QpwL5tke4Pnpja7X4',
+    error: false
+  }
+  async fetchData(url) {
+    const response = await fetch(url)
+    const data = await response.json()
+    this.setState({
+      isLoading: false,
+      data: data.data
+    })
+  }
+
+  async fetchLogit(login, url, email, pass) {
+    this.postData(login, {
+    // "email": "eve.holt@reqres.in",
+    // "password": "pistol"
+      "email": email,
+      "password": pass
+    }).then((data) => {
+      if (data.token == this.state.token) {
+        this.fetchData(url)
+        console.log('data', data);
+      } else {
+        this.setState({
+          error: true,
+          isModeSelected: false,
+          isLoading: false,
+        })
       }
-    ]
-  }
-
-  addGroup = row => {
-    let newGroup = this.state.group;
-    newGroup.push({
-      id: Math.floor(Math.random() * 100), nameGroup: row, test: []
     });
-    this.setState(newGroup);
   }
 
+  async postData(url = '', data = {}) {
+    const response = await fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow', 
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+    return await response.json();
+  }
+
+
+
+
+  modeSelectHandler = (url, email, pass) => {
+    const login = `https://reqres.in/api/login`
+    this.setState({
+      isModeSelected: true,
+      isLoading: true,
+    })
+    this.fetchLogit(login, url, email, pass)
+  }
   render() {
-    window.addEventListener('scroll', (event) => {
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      console.log('test', scrollTop)
-    });
-    const styles = {
-      wrap: {
-        padding: '2px 3px',
-        marginBottom: '2px',
-        width: '560px',
-        display: 'flex'
-      },
-      flex: {
-        display: 'flex',
-        height: '3000px'
-      }
-    }
-    return (
-      <>
-        <AddGroup addGroup={this.addGroup} />
-        <div style={styles.flex}>
-          <div style={styles.wrap}>
-            {this.state.group.map(item => {
-              return (<Order key={item.id + Math.floor(Math.random() * 100)} infoGroup={item} />)
-            })}
-          </div>
+    if (!this.state.isModeSelected) {
+      return (
+        <div className="container">
+          <ModeSelector 
+            onSelect={this.modeSelectHandler} 
+            error={this.state.error}
+          />
         </div>
-      </>
+      )
+    }
+
+    return (
+      <div className="container">
+        {
+          this.state.isLoading
+            ? <Loader />
+            : <React.Fragment>
+              <Table
+                data={this.state.data}
+              />
+            </React.Fragment>
+        }
+      </div>
     );
   }
 }
