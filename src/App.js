@@ -50,7 +50,10 @@ class App extends Component {
   }
 
   render() {
-
+    window.addEventListener('scroll', (event) => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      console.log('test', scrollTop)
+    });
     const styles = {
       wrap: {
         padding: '2px 3px',
@@ -59,7 +62,8 @@ class App extends Component {
         display: 'flex'
       },
       flex: {
-        display: 'flex'
+        display: 'flex',
+        height: '3000px'
       }
     }
     return (
